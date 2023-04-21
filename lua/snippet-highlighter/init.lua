@@ -1,1 +1,1 @@
-print("Inside of the plugin directory")
+print("Inside of the snippet-Highlighter  directory")
