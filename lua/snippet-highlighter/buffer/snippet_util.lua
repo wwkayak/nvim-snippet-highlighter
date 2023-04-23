@@ -1,8 +1,16 @@
 
+local bu = require("buffer.buf_util")
+local mm = require("snippet-highlighter.marks.mark_manager")
 
 local M = {}
 
+  local shortcuts = nil
+  local snippets_info = nil
+
   M.get_luasnip_shortcuts = function(buf)
+    if shortcuts then
+      return shortcuts
+    end
     local ls_name_pattern = "(%a+)%s*=%s*require%(%s*%\"luasnip%\"%s*%)"
     local ls_shortcuts_pattern
     local ls_name
@@ -30,7 +38,16 @@ local M = {}
         end
       end
     end
-    return(ls_shortcuts)
+    shortcuts = {luasnip = ls_name, nodes = ls_shortcuts}
+    return shortcuts
+  end
+
+  M.set_snippet_highlights = function (buf)
+    print("setting highlights for buffer: " .. buf)
+    local rows = bu:find_pattern(buf, "=%s*s%(")
+    for r = 1, #rows do
+      vim.api.nvim_buf_set_extmark(buf, 50, rows[r], 0, {})
+    end
   end
 
 return M
