@@ -2,16 +2,16 @@
 local M = {}
 
 local lines = nil
+local name_pattern = "[^/]-%.lua"
 
-M.find_file_number = function(name)
+M.find_buf_number = function(name)
   local bn = nil
   local  buffers = vim.api.nvim_list_bufs()
-  local pattern = "[^/]-%.lua"
   for _, v in pairs(buffers) do
     if vim.api.nvim_buf_is_loaded(v) then
       local fname = vim.api.nvim_buf_get_name(v)  -- TOO UGLY(for,if,for,if...), refactor!
       if fname then
-        local split = string.match(fname, pattern)
+        local split = string.match(fname, name_pattern)
         if split then
           if name == split then
             bn = v
@@ -39,6 +39,21 @@ function M:find_pattern(buf, pattern)
     end
   end
   return rows
+end
+
+M.find_buf_name = function(bn)
+  local path=vim.api.nvim_buf_get_name(bn)
+  local name = string.match(path, name_pattern)
+  return name
+end
+
+M.get_namespace_name = function(id)
+  local namespaces = vim.api.nvim_get_namespaces()
+  for k, v in pairs(namespaces) do
+    if(v == id) then
+      return k
+    end
+  end
 end
 
 return M
