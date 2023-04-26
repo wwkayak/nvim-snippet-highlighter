@@ -19,19 +19,15 @@ badd +50 ~/.config/nvim/luasnippets/lua/my_snippet_examples.lua
 badd +42 ~/.config/nvim/luasnippets/lua/snippet-snippets.lua
 badd +41 buffer/buf_util.lua
 badd +3 buffer/snippet_util.lua
-badd +43 ~/dev/lua/plugins/nvim-snippet-highlighter/lua/snippet-highlighter/marks/marks.lua
+badd +34 ~/dev/lua/plugins/nvim-snippet-highlighter/lua/snippet-highlighter/marks/marks.lua
 badd +1 marks/mark_manager.lua
 badd +6 temp.lua
 argglobal
 %argdel
 $argadd buffer/snippet-finder.lua
 tabnew +setlocal\ bufhidden=wipe
-tabnew +setlocal\ bufhidden=wipe
-tabnew +setlocal\ bufhidden=wipe
-tabnew +setlocal\ bufhidden=wipe
-tabnew +setlocal\ bufhidden=wipe
 tabrewind
-edit ~/.config/nvim/luasnippets/lua/snippet-snippets.lua
+edit temp.lua
 argglobal
 balt init.lua
 setlocal fdm=manual
@@ -50,46 +46,6 @@ keepjumps exe s:l
 normal! zt
 keepjumps 1
 normal! 0
-tabnext
-edit buffer/buf_util.lua
-argglobal
-balt buffer/snippet-finder.lua
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 41 - ((40 * winheight(0) + 23) / 47)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 41
-normal! 013|
-tabnext
-edit buffer/snippet_util.lua
-argglobal
-balt buffer/buf_util.lua
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 3 - ((2 * winheight(0) + 23) / 47)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 3
-normal! 07|
 tabnext
 edit ~/dev/lua/plugins/nvim-snippet-highlighter/lua/snippet-highlighter/marks/marks.lua
 argglobal
@@ -104,53 +60,13 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 43 - ((42 * winheight(0) + 23) / 47)
+let s:l = 34 - ((22 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 43
+keepjumps 34
 normal! 0
-tabnext
-edit init.lua
-argglobal
-balt buffer/snippet-finder.lua
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 23) / 47)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 1
-normal! 0
-tabnext
-edit temp.lua
-argglobal
-balt init.lua
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let &fdl = &fdl
-let s:l = 6 - ((5 * winheight(0) + 23) / 47)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 6
-normal! 039|
-tabnext 5
+tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif

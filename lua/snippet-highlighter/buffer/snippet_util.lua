@@ -1,12 +1,10 @@
 
 local bu = require("buffer.buf_util")
-local mm = require("snippet-highlighter.marks.mark_manager")
 local notify = require("notify")
 
 local M = {}
 
 local shortcuts = nil
-local snippets_info = nil
 
 M.get_luasnip_shortcuts = function(buf)
   if shortcuts then
