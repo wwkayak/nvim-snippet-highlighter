@@ -13,23 +13,16 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 buffer/snippet-finder.lua
-badd +1 init.lua
-badd +50 ~/.config/nvim/luasnippets/lua/my_snippet_examples.lua
-badd +42 ~/.config/nvim/luasnippets/lua/snippet-snippets.lua
-badd +41 buffer/buf_util.lua
-badd +3 buffer/snippet_util.lua
-badd +34 ~/dev/lua/plugins/nvim-snippet-highlighter/lua/snippet-highlighter/marks/marks.lua
-badd +1 marks/mark_manager.lua
-badd +6 temp.lua
+badd +1 marks/marks.lua
+badd +5 temp.lua
+badd +3 buffer/buf_util.lua
 argglobal
 %argdel
-$argadd buffer/snippet-finder.lua
+$argadd marks/marks.lua
 tabnew +setlocal\ bufhidden=wipe
 tabrewind
-edit temp.lua
+edit marks/marks.lua
 argglobal
-balt init.lua
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -40,16 +33,16 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 23) / 47)
+let s:l = 14 - ((13 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 1
+keepjumps 14
 normal! 0
 tabnext
-edit ~/dev/lua/plugins/nvim-snippet-highlighter/lua/snippet-highlighter/marks/marks.lua
+edit temp.lua
 argglobal
-balt marks/mark_manager.lua
+balt marks/marks.lua
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -60,13 +53,13 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 34 - ((22 * winheight(0) + 23) / 47)
+let s:l = 5 - ((4 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 34
+keepjumps 5
 normal! 0
-tabnext 1
+tabnext 2
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif

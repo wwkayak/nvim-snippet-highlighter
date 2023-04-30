@@ -7,6 +7,7 @@ local M = {}
 local shortcuts = nil
 
 M.get_luasnip_shortcuts = function(buf)
+  if not buf then return nil end
   if shortcuts then
     return shortcuts
   end

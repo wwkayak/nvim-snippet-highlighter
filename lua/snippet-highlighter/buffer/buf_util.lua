@@ -4,6 +4,12 @@ local M = {}
 local lines = nil
 local name_pattern = "[^/]-%.lua"
 
+
+M.get_buf_line = function(buf, line_no)
+  lines = vim.api.nvim_buf_get_lines(buf, 0, -1, true)
+  return lines[line_no]
+end
+
 M.find_buf_number = function(name)
   local bn = nil
   local  buffers = vim.api.nvim_list_bufs()

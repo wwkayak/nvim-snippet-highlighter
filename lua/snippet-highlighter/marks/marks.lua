@@ -1,4 +1,7 @@
 require("math")
+local bu = require("buffer.buf_util")
+local colors = require("tokyonight.colors").setup() -- options as on git too
+local util = require("tokyonight.util")
 
 local M = {}
 
@@ -6,24 +9,47 @@ M.extmarks = {}
 M.mt = {}
 setmetatable(M.extmarks, M.mt)
 setmetatable(M, M.mt)
-M.mt.__tostring =  M.tostring
+M.mt.__tostring = M.tostring
 
 local ns = vim.api.nvim_create_namespace("snippet-highlighter")
 
-M.set_random_extmarks = function(count)
+M.set_random_extmarks = function(buf, count)
   math.randomseed(os.time())
-  for _ = 0, count do
+  local buf_len = #bu.get_buf_lines(buf)
+  local lines = bu.get_buf_lines(buf)
+  local r
+  local c
+  local char
+  local mc = 0
+  for _, _ in pairs(M.extmarks) do
+    mc = mc + 1
+  end
+  if mc == count then
+    return
+  end
+  while mc ~= count do
     local id = math.random(1, 10)
     if not M.get_extmark(id) then
-      M.set_extmark(id , math.random(0, 1000), math.random(0, 80))
+      repeat
+        r = math.random(0, buf_len-1)
+      until lines[r+1] ~= ""
+      mc = mc + 1
+      repeat
+        c = math.random(0, #lines[r]-1)
+        char = string.sub(lines[r+1],c+1, c+1)
+      until char ~= ""
+      print(string.format("string.sub(lines[r+1], c+1, c+1) = %s", char))
+      print(string.format("buffer: %d { %d, %d }", buf, r+1, c+1))
+      M.set_extmark(buf, id, r, c)
     end
   end
   return M.extmarks
 end
 
-M.set_extmark = function(id, r, c)
+M.set_extmark = function(buf, id, r, c)
   if not M.get_extmark(id) then
-    table.insert(M.extmarks, { id = id, { row = r, col = c } })
+    vim.api.nvim_buf_set_extmark(buf, ns, r, c, { sign_text = "" })
+    table.insert(M.extmarks, { id = id, { row = r, col = c } }) --buffer too?
   end
 end
 
@@ -48,16 +74,27 @@ M.del_ext_mark = function(buf, id)
   end
 end
 
-M.clear_marks = function()
-  for _, v in pairs(M.extmarks) do
-    M.del_ext_mark(0, v.id)
+M.clear_marks = function(buf)
+  local marks = vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
+  if marks then
+    for i = 1, #marks do
+      vim.print(marks[i])
+      vim.print(marks[i][1])
+      vim.api.nvim_buf_del_extmark(buf, ns, marks[i][1])
+    end
+  end
+  if M.marks then
+    for k, _ in pairs(M.marks) do
+      M.extmarks[k] = nil
+    end
   end
 end
+
 
 M.tostring = function()
   local str = "Marks:\n[ID, ROW, COL]\n"
   for _, v in pairs(M.extmarks) do
-    str = str .. string.format("{ {%d}, { %d, %d } }\n", v.id, v[1].row, v[1].col)
+    str = str .. string.format("{ {%d}, { %d, %d } }\n", v.id, v[1].row - 1, v[1].col - 1)
   end
   return str
 end
@@ -70,4 +107,29 @@ M.print_mark = function(m)
   end
 end
 
+-- look below
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- just making it longer file
 return M
