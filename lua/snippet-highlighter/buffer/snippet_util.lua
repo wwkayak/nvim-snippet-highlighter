@@ -1,5 +1,5 @@
 
-local bu = require("buffer.buf_util")
+local bu = require("snippet-highlighter.buffer.buf_util")
 local notify = require("notify")
 
 local M = {}
@@ -8,7 +8,10 @@ local shortcuts = nil
 
 M.has_snippets = function(buf)
   local str = string.format("looking for snippets in buf:%d", buf)
-  require("notify").notify(str, "", {title = "snippet-highlighter"})
+  require("notify").notify(str, "", {title = "snippet-highlighter.snippet_util.lua"})
+   if M.get_luasnip_shortcuts(buf) then
+      M:print_snippet_info(buf)
+    end
 end
 
 M.get_luasnip_shortcuts = function(buf)
@@ -29,6 +32,9 @@ M.get_luasnip_shortcuts = function(buf)
       if ls_name ~= nil then
         break
       end
+    end
+    if ls_name == nil then
+      return nil
     end
     ls_shortcuts_pattern = "(%a+)%s*=%s*" .. ls_name ..".%a+_node"
     local snippet_pattern = "(%a+)%s*=%s*" .. ls_name ..".snippet$"

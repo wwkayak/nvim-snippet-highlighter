@@ -1,5 +1,5 @@
 local api = vim.api
-local su = require("buffer.snippet_util")
+local su = require("snippet-highlighter.buffer.snippet_util")
 local ntfy = require("notify")
 
 
@@ -18,9 +18,9 @@ M.setup = function()
     pattern = "lua",
     group = group,
     callback = function(args)
-      local str = string.format("Callback for %s event", args.event)
-      ntfy.notify(str, "", { title = args.file })
-      --su.has_snippets(args.buf)
+      local str = string.format("autocommands.lua: %s event", args.event)
+      ntfy.notify(str, "", { title = args.file .. ': ' .. args.match})
+      su.has_snippets(args.buf)
     end
   })
 end
