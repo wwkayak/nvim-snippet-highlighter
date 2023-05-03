@@ -6,6 +6,11 @@ local M = {}
 
 local shortcuts = nil
 
+M.has_snippets = function(buf)
+  local str = string.format("looking for snippets in buf:%d", buf)
+  require("notify").notify(str, "", {title = "snippet-highlighter"})
+end
+
 M.get_luasnip_shortcuts = function(buf)
   if not buf then return nil end
   if shortcuts then
