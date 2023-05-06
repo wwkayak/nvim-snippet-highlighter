@@ -5,7 +5,6 @@ local ntfy = require("notify")
 local M = {}
 
 M.setup = function()
-  ntfy.notify("M.setup() called.", "", { title = "snippet-highlighter/init.lua" })
   require("snippet-highlighter.autocommands")
 end
 
