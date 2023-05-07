@@ -1,5 +1,5 @@
-
 local colors = require("tokyonight.colors").setup()
+local color_util = require("tokyonight.util")
 
 local M = {}
 
@@ -72,12 +72,12 @@ let win = nvim_open_win(buf, 0, opts)
 call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
 --]]
 M.create_snippets_float = function(snip_lines)
-  local buf = vim.api.nvim_create_buf(false, true)
+  local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, true, snip_lines)
   local opts = {
     relative = 'win',
     width = 30,
-    height = #snip_lines+5,
+    height = #snip_lines + 5,
     row = 1,
     col = 120,
     anchor = "NE",
@@ -87,10 +87,12 @@ M.create_snippets_float = function(snip_lines)
     title = "Snippet Shortcuts Found:",
     noautocmd = true
   }
-  local float = vim.api.nvim_open_win(buf, false, opts )
+  local win_id = vim.api.nvim_open_win(buf, false, opts)
   local ns = vim.api.nvim_create_namespace('')
-  vim.api.nvim_win_set_hl_ns(float, ns)
-  vim.api.nvim_set_hl(ns,'NormalFloat', { background = colors.bg})
+  vim.api.nvim_win_set_hl_ns(win_id, ns)
+  vim.api.nvim_set_hl(ns, 'NormalFloat', { background = color_util.lighten(colors.bg, .93) })
+  vim.api.nvim_buf_add_highlight(buf, ns, 'DiagnosticHint', 0, 0, -1)
+  return buf
 end
 
 return M

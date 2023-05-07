@@ -5,7 +5,20 @@ local M = {}
 
 local ls_name_pattern = "(%a+)%s*=%s*require%(%s*%\"luasnip%\"%s*%)"
 
-local shortcuts = nil
+local shortcuts = {
+  luasnip = "",
+  snippet_node = "",
+  text_node = "",
+  insert_node = "",
+  function_node = "",
+  choice_node = "",
+  dynamic_node = "",
+  restore_node = "",
+  fmt = "",
+
+}
+
+
 
 M.has_luasnip = function(buf)
   local matches = bu:find_pattern(buf, ls_name_pattern)
@@ -15,6 +28,21 @@ M.has_luasnip = function(buf)
   end
   return count > 0 or false
 end
+
+--[[
+perfect and use has_luasnip
+Check when this gets run (everytime, or can I keep track of has_luasnip)
+For all the things I findi, set / store highlight info with the thing 
+    Structure for nodes... and snippets???? maybe.
+
+    Node:
+      Type:
+      Name:
+      Highlight:
+        location for highlights e.g.  t(********)
+
+--]]
+
 
 M.find_luasnip_shortcuts = function(buf)
   if not buf then

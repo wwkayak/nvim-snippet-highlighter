@@ -4,13 +4,13 @@ local su = require("snippet-highlighter.buffer.snippet_util")
 local bu = require("snippet-highlighter.buffer.buf_util")
 local ntfy = require("notify")
 local utils = require("snippet-highlighter.util")
+local float_buf = nil
 
 local augroup = api.nvim_create_augroup('snippet-highlighter', { clear = true })
 
 local M = {}
 
 M.setup = function()
-  ntfy.notify("Creating User Commands...", "", { title = "plugin/init.lua" })
 
   vim.api.nvim_create_user_command("SnippetShortcuts",
     function(opts)
@@ -22,29 +22,22 @@ M.setup = function()
     {}
   )
 
-  ntfy.notify("Creating Autocommands...", "",
-    { title = "snippet-highlighter/autocommands.lua" }
-  )
   api.nvim_clear_autocmds({ group = augroup })
 
   api.nvim_create_autocmd({ 'FileType' }, {
-    pattern = "lua",
     group = augroup,
     callback = function(args)
       if su.has_luasnip(args.buf) then
         su.find_luasnip_shortcuts(args.buf)
-        bu.create_snippets_float(su:print_snippet_info(args.buf))
+        float_buf = bu.create_snippets_float(su:print_snippet_info(args.buf))
       end
     end
   })
 
-  api.nvim_create_autocmd({ 'InsertLeave', 'BufModifiedSet' }, {
-    pattern = "lua",
+  api.nvim_create_autocmd({ 'BufHidden' }, {
     group = augroup,
     callback = function(args)
-      local str = string.format("callback for %s event", args.event)
-      ntfy.notify(str, "", { title = utils.strip_name(args.file) })
-      --refind snippets based on marks?
+      vim.print(args)
     end
   })
 end
