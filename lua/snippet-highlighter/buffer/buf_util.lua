@@ -71,6 +71,7 @@ let win = nvim_open_win(buf, 0, opts)
 " optional: change highlight, otherwise Pmenu is used
 call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
 --]]
+
 M.create_snippets_float = function(snip_lines)
   local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, true, snip_lines)
@@ -92,7 +93,7 @@ M.create_snippets_float = function(snip_lines)
   vim.api.nvim_win_set_hl_ns(win_id, ns)
   vim.api.nvim_set_hl(ns, 'NormalFloat', { background = color_util.lighten(colors.bg, .93) })
   vim.api.nvim_buf_add_highlight(buf, ns, 'DiagnosticHint', 0, 0, -1)
-  return buf
+  return win_id, buf
 end
 
 return M
