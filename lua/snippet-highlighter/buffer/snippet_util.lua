@@ -5,6 +5,7 @@ local colors = require("tokyonight.colors").setup()
 local M = {}
 
 local ls_name_pattern = "(%a+)%s*=%s*require%(%s*%\"luasnip%\"%s*%)"
+local fmt_pattern = "(%a+)%s*=%s*require%(%s*%\"luasnip%.extras%.fmt%\"%s*%)"
 local node_pattern = "(%a+)%s*=%s*"
 
 local shortcuts = {
@@ -16,7 +17,7 @@ local shortcuts = {
   choice_node = { shortcut = "N/A", hl = colors.fg },
   dynamic_node = { shortcut = "N/A", hl = colors.fg },
   restore_node = { shortcut = "N/A", hl = colors.fg },
-  -- fmt = { shortcut = "N/A", hl = colors.fg},
+  fmt = { shortcut = "N/A", hl = colors.fg},
 }
 
 M.has_luasnip = function(buf)
@@ -60,21 +61,13 @@ M.find_luasnip_shortcuts = function(buf)
   end
 end
 
-function M:print_snippet_info(bn)
-  local ns_id = vim.api.nvim_create_namespace("snippet-highlighter")
-  local ns_name = bu.get_namespace_name(ns_id)
-  local filename = bu.find_buf_name(bn)
-  local str = ""
+function M:shortcuts_tolines()
   local lines = {}
-
   local i = 1
   for k, v in pairs(shortcuts) do
     lines[i] = string.format("%s = %s", k, v.shortcut)
-    i = i % 7 + 1
+    i = i +1
   end
-
-  local title = string.format("Snippets found. ns=\"%s\"", ns_name)
-
   return lines
 end
 

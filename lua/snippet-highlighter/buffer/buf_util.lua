@@ -71,29 +71,35 @@ let win = nvim_open_win(buf, 0, opts)
 " optional: change highlight, otherwise Pmenu is used
 call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
 --]]
-
 M.create_snippets_float = function(snip_lines)
   local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, true, snip_lines)
   local opts = {
     relative = 'win',
     width = 30,
-    height = #snip_lines + 5,
+    height = #snip_lines + 2,
     row = 1,
-    col = 120,
+    col = 100,
     anchor = "NE",
     focusable = false,
     style = "minimal",
     border = "rounded",
-    title = "Snippet Shortcuts Found:",
+    title = "Snippet Shortcuts:",
     noautocmd = true
   }
   local win_id = vim.api.nvim_open_win(buf, false, opts)
-  local ns = vim.api.nvim_create_namespace('')
+  local ns = vim.api.nvim_create_namespace("")
   vim.api.nvim_win_set_hl_ns(win_id, ns)
   vim.api.nvim_set_hl(ns, 'NormalFloat', { background = color_util.lighten(colors.bg, .93) })
-  vim.api.nvim_buf_add_highlight(buf, ns, 'DiagnosticHint', 0, 0, -1)
-  return win_id, buf
+
+  for line_num = 0, #snip_lines - 1  do
+    local idx = line_num % 7 + 1
+    local hl = "rainbowcol" .. idx
+    print(idx, hl)
+    vim.api.nvim_buf_add_highlight(buf, ns, hl, line_num , 0, -1)
+  end
+
+  return win_id
 end
 
 return M
