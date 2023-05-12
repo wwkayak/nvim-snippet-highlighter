@@ -1,27 +1,27 @@
 local bu = require("snippet-highlighter.buffer.buf_util")
 local notify = require("notify")
-local colors = require("tokyonight.colors").setup()
+local c = require("tokyonight.colors").setup()
 
 local M = {}
 
-local ls_name_pattern = "(%a+)%s*=%s*require%(%s*%\"luasnip%\"%s*%)"
-local fmt_pattern = "(%a+)%s*=%s*require%(%s*%\"luasnip%.extras%.fmt%\"%s*%)"
-local node_pattern = "(%a+)%s*=%s*"
+local ls_regex = "(%a+)%s*=%s*require%(%s*%\"luasnip%\"%s*%)"
+local fmt_regex = "(%a+)%s*=%s*require%(%s*%\"luasnip%.extras%.fmt%\"%s*%)"
+local node_regex = "%s(%a+)%s*=.+%."
 
 local shortcuts = {
-  luasnip = { shortcut = "N/A", hl = colors.fg },
-  snippet = { shortcut = "N/A", hl = colors.fg },
-  text_node = { shortcut = "N/A", hl = colors.fg },
-  insert_node = { shortcut = "N/A", hl = colors.fg },
-  function_node = { shortcut = "N/A", hl = colors.fg },
-  choice_node = { shortcut = "N/A", hl = colors.fg },
-  dynamic_node = { shortcut = "N/A", hl = colors.fg },
-  restore_node = { shortcut = "N/A", hl = colors.fg },
-  fmt = { shortcut = "N/A", hl = colors.fg},
+  luasnip = { shortcut = "N/A", hl = c.fg, regex = ls_regex },
+  snippet = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "snippet" },
+  text_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "text_node" },
+  insert_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "insert_node"},
+  function_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "function_node"},
+  choice_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "choice_node"},
+  dynamic_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "dynamic_node"},
+  restore_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "restore_node"},
+  fmt = { shortcut = "N/A", hl = c.fg, regex = fmt_regex },
 }
 
 M.has_luasnip = function(buf)
-  local matches = bu:find_pattern(buf, ls_name_pattern)
+  local matches = bu:find_pattern(buf, ls_regex)
   local count = 0
   for _, _ in pairs(matches) do
     count = count + 1
@@ -33,28 +33,16 @@ M.find_luasnip_shortcuts = function(buf)
   if not buf then
     return nil
   end
-  local luasnip_shortcut
 
   local count = vim.api.nvim_buf_line_count(buf)
   if count > 0 then
     local lines = vim.api.nvim_buf_get_lines(buf, 0, count, true)
-    for i = 1, #lines do
-      _, _, luasnip_shortcut = string.find(lines[i], ls_name_pattern)
-      if luasnip_shortcut ~= nil then
-        break
-      end
-    end
-    if luasnip_shortcut == nil then
-      return nil
-    end
-
-    shortcuts["luasnip"].shortcut = luasnip_shortcut
-    for i = 1, #lines do
-      for node, _ in pairs(shortcuts) do
-        local np = node_pattern .. luasnip_shortcut .. "." .. node
-        local _, _, shortcut = string.find(lines[i], np)
-        if shortcut ~= nil then
-          shortcuts[node].shortcut = shortcut
+    for k, v in pairs(shortcuts) do
+      for i = 1, #lines do
+        local _, _, str = string.find(lines[i], v.regex)
+        if str ~= nil then
+          shortcuts[k].shortcut = str
+          break
         end
       end
     end
@@ -66,7 +54,7 @@ function M:shortcuts_tolines()
   local i = 1
   for k, v in pairs(shortcuts) do
     lines[i] = string.format("%s = %s", k, v.shortcut)
-    i = i +1
+    i = i + 1
   end
   return lines
 end

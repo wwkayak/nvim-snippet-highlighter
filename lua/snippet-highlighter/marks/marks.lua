@@ -15,31 +15,30 @@ local ns = vim.api.nvim_create_namespace("snippet-highlighter")
 
 M.set_random_extmarks = function(buf, count)
   math.randomseed(os.time())
-  local buf_len = #bu.get_buf_lines(buf)
   local lines = bu.get_buf_lines(buf)
-  local r
-  local c
+  local buf_len = #lines
+  local r, c
   local char
-  local mc = 0
+  local i = 0
   for _, _ in pairs(M.extmarks) do
-    mc = mc + 1
+    i = i + 1
   end
-  if mc == count then
+  if i == count then
     return
   end
-  while mc ~= count do
+  while i ~= count do
     local id = math.random(1, 10)
     if not M.get_extmark(id) then
       repeat
-        r = math.random(0, buf_len-1)
-      until lines[r+1] ~= ""
-      mc = mc + 1
+        r = math.random(0, buf_len - 1)
+      until lines[r + 1] ~= ""
+      i = i + 1
       repeat
-        c = math.random(0, #lines[r]-1)
-        char = string.sub(lines[r+1],c+1, c+1)
+        c = math.random(0, buf_len - 1)
+        char = string.sub(lines[r + 1], c + 1, c + 1)
       until char ~= ""
-      print(string.format("string.sub(lines[r+1], c+1, c+1) = %s", char))
-      print(string.format("buffer: %d { %d, %d }", buf, r+1, c+1))
+      --print(string.format("string.sub(lines[r+1], c+1, c+1) = %s", char))
+      --print(string.format("buffer: %d { %d, %d }", buf, r + 1, c + 1))
       M.set_extmark(buf, id, r, c)
     end
   end
@@ -78,8 +77,8 @@ M.clear_marks = function(buf)
   local marks = vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
   if marks then
     for i = 1, #marks do
-      vim.print(marks[i])
-      vim.print(marks[i][1])
+      --vim.print(marks[i])
+      --vim.print(marks[i][1])
       vim.api.nvim_buf_del_extmark(buf, ns, marks[i][1])
     end
   end

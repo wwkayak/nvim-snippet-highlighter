@@ -6,11 +6,6 @@ local M = {}
 local lines = nil
 local name_pattern = "[^/]+%.lua"
 
-M.get_buf_line = function(buf, line_no)
-  lines = vim.api.nvim_buf_get_lines(buf, 0, -1, true)
-  return lines[line_no]
-end
-
 M.find_buf_name = function(bn)
   local path = vim.api.nvim_buf_get_name(bn)
   local name = string.match(path, name_pattern)
@@ -42,6 +37,11 @@ M.get_buf_lines = function(buf)
   return lines
 end
 
+M.get_buf_line = function(buf, line_no)
+  lines = vim.api.nvim_buf_get_lines(buf, 0, -1, true)
+  return lines[line_no]
+end
+
 function M:find_pattern(buf, pattern)
   local matches = {}
   lines = self.get_buf_lines(buf)
@@ -62,15 +62,17 @@ M.get_namespace_name = function(id)
     end
   end
 end
---[[
-let buf = nvim_create_buf(v:false, v:true)
-call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
-let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
-    \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
-let win = nvim_open_win(buf, 0, opts)
-" optional: change highlight, otherwise Pmenu is used
-call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
---]]
+
+M.set_rainbow_highlights = function(buf, new_lines)
+  local ns = vim.api.nvim_create_namespace("")
+  for line_num = 0, #new_lines - 1 do
+    local idx = line_num % 7 + 1
+    local hl = "rainbowcol" .. idx
+    vim.api.nvim_buf_add_highlight(buf, ns, hl, line_num, 0, -1)
+  end
+  return buf
+end
+
 M.create_snippets_float = function(snip_lines)
   local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, true, snip_lines)
@@ -87,17 +89,12 @@ M.create_snippets_float = function(snip_lines)
     title = "Snippet Shortcuts:",
     noautocmd = true
   }
+
   local win_id = vim.api.nvim_open_win(buf, false, opts)
   local ns = vim.api.nvim_create_namespace("")
   vim.api.nvim_win_set_hl_ns(win_id, ns)
-  vim.api.nvim_set_hl(ns, 'NormalFloat', { background = color_util.lighten(colors.bg, .93) })
-
-  for line_num = 0, #snip_lines - 1  do
-    local idx = line_num % 7 + 1
-    local hl = "rainbowcol" .. idx
-    print(idx, hl)
-    vim.api.nvim_buf_add_highlight(buf, ns, hl, line_num , 0, -1)
-  end
+  vim.api.nvim_set_hl(ns, 'NormalFloat', { background = color_util.lighten(colors.bg, .96) })
+  M.set_rainbow_highlights(buf, snip_lines)
 
   return win_id
 end
