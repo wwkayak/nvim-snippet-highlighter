@@ -24,15 +24,20 @@ M.setup = function()
   api.nvim_clear_autocmds({ group = augroup })
 
   api.nvim_create_autocmd({ 'FileType' }, {
+    pattern = "lua",
     group = augroup,
     callback = function(args)
-      if vim.fn.getbufinfo(args.buf)[1] == 1 then
-        return
-      end
-      if su.has_luasnip(args.buf) then
-        snippets_buf = args.buf
-        su.find_luasnip_shortcuts(args.buf)
-        win_id = bu.create_snippets_float(su:shortcuts_tolines())
+      local is_hidden = vim.fn.getbufinfo(args.buf)[1].hidden == 1
+      local loaded = vim.api.nvim_buf_is_loaded(args.buf)
+      local listed = vim.api.nvim_buf_get_option(args.buf, 'buflisted')
+      vim.print( is_hidden, loaded, listed)
+      if is_hidden and listed and loaded then
+        print("continuing")
+        if su.has_luasnip(args.buf) then
+          snippets_buf = args.buf
+          su.find_luasnip_shortcuts(args.buf)
+          win_id = bu.create_snippets_float(su:shortcuts_tolines())
+        end
       end
     end
   })
@@ -46,6 +51,7 @@ M.setup = function()
     end
   })
 
+  --[[
   api.nvim_create_autocmd({ 'WinEnter' }, {
     group = augroup,
     callback = function(args)
@@ -54,11 +60,13 @@ M.setup = function()
       end
       if su.has_luasnip(args.buf) then
         if vim.fn.getbufinfo(args.buf)[1].hidden == 0 then
-          mark.set_random_extmarks(args.buf , 10)
+          mark.set_random_extmarks(args.buf, 10)
         end
       end
     end
   })
+--]]
+
 end
 
 M.setup()
