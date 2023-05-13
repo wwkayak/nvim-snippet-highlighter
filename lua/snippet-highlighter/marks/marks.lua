@@ -1,5 +1,5 @@
 require("math")
-local bu = require("buffer.buf_util")
+local bu = require("snippet-highlighter.buffer.buf_util")
 local colors = require("tokyonight.colors").setup() -- options as on git too
 local util = require("tokyonight.util")
 
