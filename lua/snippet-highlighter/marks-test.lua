@@ -5,14 +5,13 @@ local buf
 buf = bu.find_buf_number("snippet-defines.lua")
 
 if not buf then
-  buf = vim.api.nvim_create_buf(true, false)
-  vim.api.nvim_buf_set_name(buf, './snippet-defines.lua')
-  vim.api .nvim_buf_call(buf, vim.cmd.edit)
+  buf = vim.fn.bufadd("snippet-defines.lua")
+  vim.fn.bufload(buf)
+  vim.api.nvim_buf_set_option(buf, 'buflisted', true)
 end
 
-vim.print(vim.fn.getbufinfo(buf)[1].hidden)
-if vim.fn.getbufinfo(buf)[1].hidden == 0 then
-  m.set_random_extmarks(buf , 10)
-end
---m.clear_marks(buf)
+--vim.print(vim.api.nvim_get_all_options_info())
+vim.print(string.format("hidden: %s", vim.fn.getbufinfo(buf)[1].hidden == 1 ))
+vim.print(string.format("buflisted: %s", vim.api.nvim_buf_get_option(buf, "buflisted")))
+
 
