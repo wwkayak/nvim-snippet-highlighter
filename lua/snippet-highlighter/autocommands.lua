@@ -1,11 +1,12 @@
-local api = vim.api
-
+--
 local su = require("snippet-highlighter.buffer.snippet_util")
 local bu = require("snippet-highlighter.buffer.buf_util")
 local mark = require("snippet-highlighter.marks.marks")
+local highlights = require("snippet-highlighter.highlights")
+local api = vim.api
+
 local snippets_buf = nil
 local win_id = nil
-
 local augroup = api.nvim_create_augroup('snippet-highlighter', { clear = true })
 
 local M = {}
@@ -22,6 +23,13 @@ M.setup = function()
   )
 
   api.nvim_clear_autocmds({ group = augroup })
+
+  api.nvim_create_autocmd({ 'ColorScheme' }, {
+    pattern = '*',
+    callback = function(_)
+      highlights.setup()
+    end
+  })
 
   api.nvim_create_autocmd({ 'FileType' }, {
     pattern = "lua",

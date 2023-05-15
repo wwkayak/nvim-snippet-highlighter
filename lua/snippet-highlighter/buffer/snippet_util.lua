@@ -10,13 +10,13 @@ local node_regex = "%s(%a+)%s*=.+%."
 
 local shortcuts = {
   luasnip = { shortcut = "N/A", hl = c.fg, regex = ls_regex },
-  snippet = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "snippet" },
-  text_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "text_node" },
-  insert_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "insert_node"},
-  function_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "function_node"},
-  choice_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "choice_node"},
-  dynamic_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "dynamic_node"},
-  restore_node = { shortcut = "N/A", hl = c.fg, regex = node_regex .. "restore_node"},
+  snippet = { shortcut = "N/A", hl = "SnippetSnippet", regex = node_regex .. "snippet" },
+  text_node = { shortcut = "N/A", hl = "SnippetTextNode", regex = node_regex .. "text_node" },
+  insert_node = { shortcut = "N/A", hl = "SnippetInsertNode" , regex = node_regex .. "insert_node"},
+  function_node = { shortcut = "N/A", hl = "SnippetFunctionNode" , regex = node_regex .. "function_node"},
+  choice_node = { shortcut = "N/A", hl = "SnippetChoiceNode" , regex = node_regex .. "choice_node"},
+  dynamic_node = { shortcut = "N/A", hl = "SnippetDynamicNode" , regex = node_regex .. "dynamic_node"},
+  restore_node = { shortcut = "N/A", hl = "SnippetRestoreNode" , regex = node_regex .. "restore_node"},
   fmt = { shortcut = "N/A", hl = c.fg, regex = fmt_regex },
 }
 
