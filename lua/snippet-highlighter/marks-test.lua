@@ -1,4 +1,4 @@
-local bu = require("snippet-highlighter.buffer.buf_util")
+local bu = require("snippet-highlighter.util.buffers")
 local m = require("snippet-highlighter.marks.marks")
 
 local buf

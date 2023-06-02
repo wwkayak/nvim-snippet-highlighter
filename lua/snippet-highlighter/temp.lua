@@ -1,5 +1,5 @@
 
-local bu = require("buffer.buf_util")
+local bu = require("snippet-highlighter.util.buffers")
 local marks = require("marks.marks")
 
 marks.mt.__tostring = marks.tostring

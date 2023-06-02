@@ -1,6 +1,6 @@
 --
-local su = require("snippet-highlighter.buffer.snippet_util")
-local bu = require("snippet-highlighter.buffer.buf_util")
+local su = require("snippet-highlighter.util.snippets")
+local bu = require("snippet-highlighter.util.buffers")
 local mark = require("snippet-highlighter.marks.marks")
 local highlights = require("snippet-highlighter.highlights")
 local api = vim.api

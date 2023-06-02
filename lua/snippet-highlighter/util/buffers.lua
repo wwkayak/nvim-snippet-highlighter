@@ -1,5 +1,5 @@
-local colors = require("tokyonight.colors").setup()
-local color_util = require("tokyonight.util")
+--local colors = require("tokyonight.colors").setup()
+--local color_util = require("tokyonight.util")
 
 local M = {}
 
@@ -93,7 +93,7 @@ M.create_snippets_float = function(snip_lines)
   local win_id = vim.api.nvim_open_win(buf, false, opts)
   local ns = vim.api.nvim_create_namespace("")
   vim.api.nvim_win_set_hl_ns(win_id, ns)
-  vim.api.nvim_set_hl(ns, 'NormalFloat', { background = color_util.lighten(colors.bg, .96) })
+--  vim.api.nvim_set_hl(ns, 'NormalFloat', { background = color_util.lighten(colors.bg, .96) })
   M.set_rainbow_highlights(buf, snip_lines)
 
   return win_id

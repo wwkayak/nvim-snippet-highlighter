@@ -1,23 +1,41 @@
-local bu = require("snippet-highlighter.buffer.buf_util")
-local notify = require("notify")
-local c = require("tokyonight.colors").setup()
-
-local M = {}
+local node_types = require("luasnip.util.types")
+local bu = require("snippet-highlighter.util.buffers")
+--local c = require("tokyonight.colors").setup()
 
 local ls_regex = "(%a+)%s*=%s*require%(%s*%\"luasnip%\"%s*%)"
 local fmt_regex = "(%a+)%s*=%s*require%(%s*%\"luasnip%.extras%.fmt%\"%s*%)"
 local node_regex = "%s(%a+)%s*=.+%."
 
+local M = {}
+
+local ls_names = {
+  { sn = "s", ln = "snippet", pn = node_types.names_pascal_case[1]},
+  { sn = "sn", ln = "snippet_node", pn = node_types.names_pascal_case[2] },
+  { sn = "t", ln = "text_node", pn = node_types.names_pascal_case[3] },
+  { sn = "f", ln = "function_node", pn = node_types.names_pascal_case[4] },
+  { sn = "i", ln = "insert_node", pn = node_types.names_pascal_case[5] },
+  { sn = "c", ln = "choice_node", pn = node_types.names_pascal_case[5] },
+  { sn = "d", ln = "dynamic_node", pn = node_types.names_pascal_case[6] },
+  { sn = "r", ln = "restore_node", pn = node_types.names_pascal_case[7] },
+}
+
+
+local snippet_nodes = {}
+
+M.get_snippet_nodes = function()
+  local names = node_types.names_pascal_case
+end
+
 local shortcuts = {
-  luasnip = { shortcut = "N/A", hl = c.fg, regex = ls_regex },
+  luasnip = { shortcut = "N/A", hl = "LuaSnip", regex = ls_regex },
   snippet = { shortcut = "N/A", hl = "SnippetSnippet", regex = node_regex .. "snippet" },
   text_node = { shortcut = "N/A", hl = "SnippetTextNode", regex = node_regex .. "text_node" },
-  insert_node = { shortcut = "N/A", hl = "SnippetInsertNode" , regex = node_regex .. "insert_node"},
-  function_node = { shortcut = "N/A", hl = "SnippetFunctionNode" , regex = node_regex .. "function_node"},
-  choice_node = { shortcut = "N/A", hl = "SnippetChoiceNode" , regex = node_regex .. "choice_node"},
-  dynamic_node = { shortcut = "N/A", hl = "SnippetDynamicNode" , regex = node_regex .. "dynamic_node"},
-  restore_node = { shortcut = "N/A", hl = "SnippetRestoreNode" , regex = node_regex .. "restore_node"},
-  fmt = { shortcut = "N/A", hl = c.fg, regex = fmt_regex },
+  insert_node = { shortcut = "N/A", hl = "SnippetInsertNode", regex = node_regex .. "insert_node" },
+  function_node = { shortcut = "N/A", hl = "SnippetFunctionNode", regex = node_regex .. "function_node" },
+  choice_node = { shortcut = "N/A", hl = "SnippetChoiceNode", regex = node_regex .. "choice_node" },
+  dynamic_node = { shortcut = "N/A", hl = "SnippetDynamicNode", regex = node_regex .. "dynamic_node" },
+  restore_node = { shortcut = "N/A", hl = "SnippetRestoreNode", regex = node_regex .. "restore_node" },
+  --fmt = { shortcut = "N/A", hl = c.fg, regex = fmt_regex },
 }
 
 M.has_luasnip = function(buf)

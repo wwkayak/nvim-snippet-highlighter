@@ -39,4 +39,6 @@ local tblAdd = s("tbi",
 )
 table.insert(snippets, tblAdd)
 
+print(type(s))
+
 return snippets, autosnippets
